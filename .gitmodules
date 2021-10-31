@@ -1,0 +1,3 @@
+[submodule "hardware/icarus/libraries/kicad-inventory"]
+	path = hardware/icarus/libraries/kicad-inventory
+	url = https://github.com/nnarain/kicad-inventory.git
