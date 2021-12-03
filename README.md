@@ -4,6 +4,8 @@
 
 Icarus is a controller for robotics applications.
 
+![Image not found](docs/banner.png)
+
 Features:
 
 * 6 PWM outputs
@@ -11,5 +13,5 @@ Features:
 * I2C
 * 8 GPIO (including breakout for SPI)
 * USB 2.0
-* IMU (gyro/accel)
+* IMU (gyro/accelerometer/temperature)
 * 30.5 x 30.5 millimeter mounting holes (for drones).
