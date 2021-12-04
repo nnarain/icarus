@@ -1362,4 +1362,230 @@ Wire Wire Line
 Connection ~ 2950 1200
 Wire Wire Line
 	2950 1550 2950 1650
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61B20520
+P 9550 6350
+F 0 "TP?" V 9504 6538 50  0000 L CNN
+F 1 "3V3" V 9595 6538 50  0000 L CNN
+F 2 "" H 9750 6350 50  0001 C CNN
+F 3 "~" H 9750 6350 50  0001 C CNN
+	1    9550 6350
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61B28D83
+P 9550 6550
+F 0 "TP?" V 9504 6738 50  0000 L CNN
+F 1 "5V" V 9595 6738 50  0000 L CNN
+F 2 "" H 9750 6550 50  0001 C CNN
+F 3 "~" H 9750 6550 50  0001 C CNN
+	1    9550 6550
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61B2FD8F
+P 9550 6750
+F 0 "TP?" V 9504 6938 50  0000 L CNN
+F 1 "GND" V 9595 6938 50  0000 L CNN
+F 2 "" H 9750 6750 50  0001 C CNN
+F 3 "~" H 9750 6750 50  0001 C CNN
+	1    9550 6750
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61B37A6F
+P 9550 6950
+F 0 "TP?" V 9504 7138 50  0000 L CNN
+F 1 "SWCLK" V 9595 7138 50  0000 L CNN
+F 2 "" H 9750 6950 50  0001 C CNN
+F 3 "~" H 9750 6950 50  0001 C CNN
+	1    9550 6950
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61B3EC36
+P 9550 7150
+F 0 "TP?" V 9504 7338 50  0000 L CNN
+F 1 "SWDIO" V 9595 7338 50  0000 L CNN
+F 2 "" H 9750 7150 50  0001 C CNN
+F 3 "~" H 9750 7150 50  0001 C CNN
+	1    9550 7150
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9550 6350 9400 6350
+Wire Wire Line
+	9550 6550 9400 6550
+Wire Wire Line
+	9550 6750 9400 6750
+Wire Wire Line
+	9550 6950 9400 6950
+Wire Wire Line
+	9550 7150 9400 7150
+$Comp
+L power:+3V3 #PWR?
+U 1 1 61B6D164
+P 9400 6350
+F 0 "#PWR?" H 9400 6200 50  0001 C CNN
+F 1 "+3V3" V 9415 6478 50  0000 L CNN
+F 2 "" H 9400 6350 50  0001 C CNN
+F 3 "" H 9400 6350 50  0001 C CNN
+	1    9400 6350
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:VBUS #PWR?
+U 1 1 61B6ED39
+P 9400 6550
+F 0 "#PWR?" H 9400 6400 50  0001 C CNN
+F 1 "VBUS" V 9415 6677 50  0000 L CNN
+F 2 "" H 9400 6550 50  0001 C CNN
+F 3 "" H 9400 6550 50  0001 C CNN
+	1    9400 6550
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 61B6FBBA
+P 9400 6750
+F 0 "#PWR?" H 9400 6500 50  0001 C CNN
+F 1 "GND" V 9405 6622 50  0000 R CNN
+F 2 "" H 9400 6750 50  0001 C CNN
+F 3 "" H 9400 6750 50  0001 C CNN
+	1    9400 6750
+	0    1    1    0   
+$EndComp
+Text Label 9400 6950 2    50   ~ 0
+swclk
+Text Label 9400 7150 2    50   ~ 0
+swdio
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61B7295E
+P 9550 7550
+F 0 "TP?" V 9504 7738 50  0000 L CNN
+F 1 "RX1" V 9595 7738 50  0000 L CNN
+F 2 "" H 9750 7550 50  0001 C CNN
+F 3 "~" H 9750 7550 50  0001 C CNN
+	1    9550 7550
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61B8B0FD
+P 9550 7750
+F 0 "TP?" V 9504 7938 50  0000 L CNN
+F 1 "TX1" V 9595 7938 50  0000 L CNN
+F 2 "" H 9750 7750 50  0001 C CNN
+F 3 "~" H 9750 7750 50  0001 C CNN
+	1    9550 7750
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9550 7550 9400 7550
+Wire Wire Line
+	9550 7750 9400 7750
+Text Label 9400 7550 2    50   ~ 0
+usart1_rx
+Text Label 9400 7750 2    50   ~ 0
+usart1_tx
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61BA44C6
+P 9550 7950
+F 0 "TP?" V 9504 8138 50  0000 L CNN
+F 1 "RX2" V 9595 8138 50  0000 L CNN
+F 2 "" H 9750 7950 50  0001 C CNN
+F 3 "~" H 9750 7950 50  0001 C CNN
+	1    9550 7950
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61BA44CC
+P 9550 8150
+F 0 "TP?" V 9504 8338 50  0000 L CNN
+F 1 "TX2" V 9595 8338 50  0000 L CNN
+F 2 "" H 9750 8150 50  0001 C CNN
+F 3 "~" H 9750 8150 50  0001 C CNN
+	1    9550 8150
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9550 7950 9400 7950
+Wire Wire Line
+	9550 8150 9400 8150
+Text Label 9400 7950 2    50   ~ 0
+usart2_rx
+Text Label 9400 8150 2    50   ~ 0
+usart2_tx
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61BAE113
+P 9550 8350
+F 0 "TP?" V 9504 8538 50  0000 L CNN
+F 1 "SCL" V 9595 8538 50  0000 L CNN
+F 2 "" H 9750 8350 50  0001 C CNN
+F 3 "~" H 9750 8350 50  0001 C CNN
+	1    9550 8350
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61BAE119
+P 9550 8550
+F 0 "TP?" V 9504 8738 50  0000 L CNN
+F 1 "SDA" V 9595 8738 50  0000 L CNN
+F 2 "" H 9750 8550 50  0001 C CNN
+F 3 "~" H 9750 8550 50  0001 C CNN
+	1    9550 8550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9550 8350 9400 8350
+Wire Wire Line
+	9550 8550 9400 8550
+Text Label 9400 8350 2    50   ~ 0
+scl
+Text Label 9400 8550 2    50   ~ 0
+sda
+$Comp
+L power:GND #PWR?
+U 1 1 61BB6C33
+P 5750 8650
+F 0 "#PWR?" H 5750 8400 50  0001 C CNN
+F 1 "GND" V 5755 8522 50  0000 R CNN
+F 2 "" H 5750 8650 50  0001 C CNN
+F 3 "" H 5750 8650 50  0001 C CNN
+	1    5750 8650
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5850 8650 5750 8650
+Text Notes 9400 6150 2    50   ~ 0
+Test Points
+$Comp
+L Connector:TestPoint TP?
+U 1 1 61BF1D61
+P 9550 7350
+F 0 "TP?" V 9504 7538 50  0000 L CNN
+F 1 "RST" V 9595 7538 50  0000 L CNN
+F 2 "" H 9750 7350 50  0001 C CNN
+F 3 "~" H 9750 7350 50  0001 C CNN
+	1    9550 7350
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9550 7350 9400 7350
+Text Label 9400 7350 2    50   ~ 0
+nreset
+Wire Notes Line
+	8900 8750 10100 8750
+Wire Notes Line
+	10100 8750 10100 6000
 $EndSCHEMATC
