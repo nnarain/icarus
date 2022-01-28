@@ -30,5 +30,6 @@ fp-info-cache
 
 hardware/icarus/export/*
 hardware/icarus/out/*
+hardware/icarus/icarus-backups/*
 
 build-assets/*
