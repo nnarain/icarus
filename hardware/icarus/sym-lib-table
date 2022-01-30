@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "icarus")(type "Legacy")(uri "${KIPRJMOD}/libraries/kicad-inventory/icarus.lib")(options "")(descr ""))
+)
