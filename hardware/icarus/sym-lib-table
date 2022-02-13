@@ -1,0 +1,5 @@
+(sym_lib_table
+  (lib (name "icarus")(type "Legacy")(uri "${KIPRJMOD}/libraries/kicad-inventory/icarus.lib")(options "")(descr ""))
+  (lib (name "tactile_switches")(type "Legacy")(uri "${KIPRJMOD}/libraries/kicad-inventory/tactile_switches.lib")(options "")(descr ""))
+  (lib (name "sensors")(type "KiCad")(uri "${KIPRJMOD}/libraries/kicad-inventory/sensors.kicad_sym")(options "")(descr ""))
+)
