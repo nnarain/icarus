@@ -14,4 +14,5 @@ Features:
 * 8 GPIO (including breakout for SPI)
 * USB 2.0
 * IMU (gyro/accelerometer/temperature)
+* Barometer
 * 30.5 x 30.5 millimeter mounting holes (for drones).
