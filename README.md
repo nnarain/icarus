@@ -4,6 +4,8 @@
 
 Icarus is a controller for robotics applications.
 
+Firmware is located [here](https://github.com/nnarain/icarus-firmware).
+
 ![Image not found](docs/banner.png)
 
 Features:
