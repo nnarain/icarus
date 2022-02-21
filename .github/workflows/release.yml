@@ -21,6 +21,7 @@ jobs:
           dir: output
           schema: 'hardware/icarus/*.kicad_sch'
           board: 'hardware/icarus/*.kicad_pcb'
+          verbose: 1
       - uses: actions/upload-artifact@v2
         with:
           name: output
