@@ -14,7 +14,7 @@ jobs:
     # container: setsoft/kicad_auto:dev_k6
     steps:
       - uses: actions/checkout@v1
-      - runs: git submodule update --init --recursive
+      - run: git submodule update --init --recursive
       - uses: INTI-CMNB/KiBot@v1_k6
         with:
           config: hardware/icarus/icarus.kibot.yaml
