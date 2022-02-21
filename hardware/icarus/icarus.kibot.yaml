@@ -61,9 +61,10 @@ outputs:
   # TODO: JLCPCB Format
   - name: 'bom'
     comment: "Bill of Materials in CSV format"
-    type: kibom
+    type: bom
     dir: fab
     options:
+      <<: *bom_options
       format: CSV
 
   - name: 'position'
