@@ -1,0 +1,42 @@
+name: "KiCAD CI/CD for Icarus Controller"
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  generate-outputs:
+    name: "KiCAD Outputs"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: git submodule update --init --recursive
+      - uses: INTI-CMNB/KiBot@v1_k6
+        with:
+          config: hardware/icarus/icarus.kibot.yaml
+          dir: output
+          schema: 'hardware/icarus/*.kicad_sch'
+          board: 'hardware/icarus/*.kicad_pcb'
+          verbose: 1
+      - uses: actions/upload-artifact@v2
+        with:
+          name: output
+          path: output
+
+  release:
+    name: Deploy to Github Releases
+    runs-on: ubuntu-latest
+    needs: [generate-outputs]
+
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: output
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./icarus-design_docs.zip
+            ./icarus-jlcpcb_fab.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
