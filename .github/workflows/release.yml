@@ -19,8 +19,8 @@ jobs:
         with:
           config: hardware/icarus/icarus.kibot.yaml
           dir: output
-          schema: '*.kicad_sch'
-          board: '*.kicad_pcb'
+          schema: 'hardware/icarus/*.kicad_sch'
+          board: 'hardware/icarus/*.kicad_pcb'
       - uses: actions/upload-artifact@v2
         with:
           name: output
