@@ -64,7 +64,6 @@ outputs:
     type: bom
     dir: fab
     options:
-      <<: *bom_options
       format: CSV
 
   - name: 'position'
