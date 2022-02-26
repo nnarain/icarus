@@ -1,0 +1,12 @@
+[book]
+authors = ["Natesh Narain"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Icarus Controller"
+
+[preprocessor.file-search]
+files = [
+    {alias = "schematic", path = "../hardware/icarus/out/design/icarus-schematic.pdf"},
+    {alias = "ibom",      path = "../hardware/icarus/out/html/icarus-ibom.html"}
+]

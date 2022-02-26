@@ -101,6 +101,8 @@ outputs:
     comment: 'Interactive BOM'
     type: ibom
     dir: html
+    options:
+      dark_mode: true
 
   # - name: step
   #   comment: "Generate 3D model (STEP)"
