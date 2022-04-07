@@ -58,13 +58,22 @@ outputs:
       metric_units: false
       output: "%f%i.%x"
 
-  # TODO: JLCPCB Format
   - name: 'bom'
     comment: "Bill of Materials in CSV format"
     type: bom
     dir: fab
     options:
       format: CSV
+      csv:
+        hide_pcb_info: true
+        hide_stats_info: true
+      columns:
+        - field: Description
+          name: Comment
+        - field: References
+          name: Designator
+        - field: Footprint
+        - field: LCSC
 
   - name: 'position'
     comment: "Pick and place file for JLCPCB"
