@@ -11,11 +11,9 @@ Firmware is located [here](https://github.com/nnarain/icarus-firmware).
 
 Features:
 
-* 6 PWM outputs
-* 2x USART ports
-* I2C
-* 8 GPIO (including breakout for SPI)
-* USB 2.0
+* Controls 4 DC brushed motors
 * IMU (gyro/accelerometer/temperature)
 * Barometer
+* USB Serial
+* Battery sense
 * 30.5 x 30.5 millimeter mounting holes (for drones).
