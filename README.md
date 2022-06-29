@@ -1,4 +1,4 @@
-# Icarus controller
+# Icarus Flight Controller
 
 [![GitHub release](https://img.shields.io/github/release/nnarain/icarus.svg)](https://github.com/nnarain/icarus/releases)
 [![Docs](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://nnarain.github.io/icarus)

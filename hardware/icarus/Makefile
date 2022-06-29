@@ -1,5 +1,5 @@
 DOCKER=docker
-KIBOT_IMAGE=setsoft/kicad_auto:dev_k6
+KIBOT_IMAGE=setsoft/kicad_auto:ki6
 
 PRJ_ROOT=/kicad
 PRJ_NAME=icarus

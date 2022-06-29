@@ -1,3 +1,9 @@
 [submodule "hardware/icarus/libraries/kicad-inventory"]
 	path = hardware/icarus/libraries/kicad-inventory
 	url = https://github.com/nnarain/kicad-inventory.git
+[submodule "hardware/icarus/libraries/espressif"]
+	path = hardware/icarus/libraries/espressif
+	url = https://github.com/espressif/kicad-libraries.git
+[submodule "hardware/icarus/libraries/USB-C-Connectors"]
+	path = hardware/icarus/libraries/USB-C-Connectors
+	url = https://github.com/nnarain/USB-C-Connectors.git

@@ -14,6 +14,11 @@ outputs:
     type: pdf_sch_print
     dir: design
 
+  - name: 'print_sch_svg'
+    comment: "Print schematic (SVG)"
+    type: svg_sch_print
+    dir: renders
+
   - name: "download_ds"
     comment: "Download Datasheets"
     type: download_datasheets
@@ -68,7 +73,7 @@ outputs:
         hide_pcb_info: true
         hide_stats_info: true
       columns:
-        - field: Description
+        - field: Value
           name: Comment
         - field: References
           name: Designator
@@ -111,7 +116,35 @@ outputs:
     type: ibom
     dir: html
     options:
-      dark_mode: true
+      dark_mode: false
+
+  - name: pcbdraw_top
+    comment: "PcbDraw test top"
+    type: pcbdraw
+    dir: renders
+    options: &pcb_draw_ops
+      format: png
+      no_drillholes: False
+      placeholder: True
+      mirror: False
+      vcuts: True
+      warnings: all
+      show_components: all
+
+  - name: pcbdraw_bottom
+    comment: "PcbDraw test bottom"
+    type: pcbdraw
+    dir: renders
+    options:
+      <<: *pcb_draw_ops
+      bottom: True
+
+  - name: "render3d"
+    type: render_3d
+    dir: renders
+    options:
+      rotate_x: 3
+      rotate_z: -2
 
   # - name: step
   #   comment: "Generate 3D model (STEP)"

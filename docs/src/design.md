@@ -1,12 +1,12 @@
 # Design
 
-Full schematics can be viewed here: {{#find schematic}}
+Below is the design documentation for the Icarus Flight Controller.
 
-To see the bill of materials click here: {{#find ibom}}
+Full schematics can be viewed here: {{#find schematic}}
 
 # Scope
 
-The scope of this project is to design and build an embedded system that can be used as a controller for multiple robotics projects. Specifically it should be able to drive: diff-drive robots, and micro-quads.
+The scope of this project is to design and build an embedded system that can be used as a microquad flight controller.
 
 | Priority | Item                               |
 | -------- | ---------------------------------- |
@@ -14,7 +14,6 @@ The scope of this project is to design and build an embedded system that can be 
 | Must     | have motion sensor                 |
 | Must     | Interface for remote control       |
 | Should   | Have USB 2.0 support               |
-| Could    | COntrol up to 8 motors (Quadruped) |
 
 # Architecture
 
@@ -34,10 +33,8 @@ Motorized applications typically require two types of power: Logic power for dig
 
 The board will have two inputs for power:
 
-* Voltage input pins from a PDB (supplying logic and motor power)
-* 5V input from a USB connector (supplying just logic power)
-
-![image not found!](./_images/power-supplies.png)
+* Two pin input for single cell LiPo battery
+* 5V input from a USB connector
 
 # Sensor
 
@@ -54,18 +51,12 @@ As one of the purposes of this controller is for drones, understanding orientati
 
 The MCU requirements for this project are pretty basic:
 
-* 4 PWM outputs (Up to 8)
-* PWM inputs
-* 2x USART
+* 4 PWM outputs
 * 1x I2C
-* Optional USB support
+* USB Serial support
 
+And ESP32-C3-MINI-1 module was selected for the following reasons:
 
-A STM32F302 for the following reasons:
-
-* Commonly used in flight controllers
-* Commonly used in general
-* Had required peripherals including USB 2.0
-* Well supported with Rust
-
-![image not found!](./_images/periph-usage.png)
+* Enough IO to control 4 motors
+* I2C for sensors
+* Built-in 2.4GHz radio support + antenna

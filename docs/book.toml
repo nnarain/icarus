@@ -7,6 +7,11 @@ title = "Icarus Controller"
 
 [preprocessor.file-search]
 files = [
-    {alias = "schematic", path = "../hardware/icarus/out/design/icarus-schematic.pdf"},
-    {alias = "ibom",      path = "../hardware/icarus/out/html/icarus-ibom.html"}
+    {alias = "schematic",     path = "../hardware/icarus/out/design/icarus-schematic.pdf",  type = "link"},
+    {alias = "schematic-svg", path = "../hardware/icarus/out/renders/icarus-schematic.svg", type = "image"},
+    {alias = "render-top",    path = "../hardware/icarus/out/renders/icarus-top.png",       type = "image"},
+    {alias = "render-bottom", path = "../hardware/icarus/out/renders/icarus-bottom.png",    type = "image"},
+    {alias = "ibom",          path = "../hardware/icarus/out/html/icarus-ibom.html",        type = "link"},
+    {alias = "render-3d",     path = "../hardware/icarus/out/renders/icarus-3D_top.png",    type = "image"},
+    {alias = "jlcpcb-files",  path = "../hardware/icarus/out/icarus-jlcpcb_fab.zip",        type = "link"},
 ]
