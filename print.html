@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="design.html"><strong aria-hidden="true">2.</strong> Design</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="intro.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="design.html"><strong aria-hidden="true">2.</strong> Design</a></li><li class="chapter-item expanded "><a href="board.html"><strong aria-hidden="true">3.</strong> Board</a></li><li class="chapter-item expanded "><a href="appendix.html"><strong aria-hidden="true">4.</strong> Appendix</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,35 +135,29 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>Icarus is a generic controller intended to be the core of various robotic/drone projects.</p>
-<p>It's primary role is to output PWM signals to control DC motors/servos and/or receive PWM input from encoders.</p>
-<p>Icarus only provides the 3.3V signal, it can not supply enough current drive motors directly.</p>
-<p>Icarus includes an IMU for attitude estimation.</p>
-<p>Other components, such as receiver, will be external interfacing through UART.</p>
+                        <p><img src="./_images/logo.png" alt="image not found!" /></p>
+<p>Icarus is a flight controller for micro-quads.</p>
 <p>Features:</p>
 <ul>
-<li>6 PWM channels</li>
-<li>2x USART</li>
-<li>I2C</li>
-<li>8 GPIO (Can be configured as SPI/CAN)</li>
-<li>USB 2.0</li>
+<li>Controls 4 brushed DC motors</li>
 <li>IMU (gyro/accelerometer/temperature)</li>
 <li>Barometer</li>
+<li>Battery sense</li>
+<li>USB Serial</li>
 <li>30.5 x 30.5 millimeter mounting holes (for drones)</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="design"><a class="header" href="#design">Design</a></h1>
+<p>Below is the design documentation for the Icarus Flight Controller.</p>
 <p>Full schematics can be viewed here: <a href="./_files/icarus-schematic.pdf">schematic</a></p>
-<p>To see the bill of materials click here: <a href="./_files/icarus-ibom.html">ibom</a></p>
 <h1 id="scope"><a class="header" href="#scope">Scope</a></h1>
-<p>The scope of this project is to design and build an embedded system that can be used as a controller for multiple robotics projects. Specifically it should be able to drive: diff-drive robots, and micro-quads.</p>
-<table><thead><tr><th>Priority</th><th>Item</th></tr></thead><tbody>
+<p>The scope of this project is to design and build an embedded system that can be used as a microquad flight controller.</p>
+<div class="table-wrapper"><table><thead><tr><th>Priority</th><th>Item</th></tr></thead><tbody>
 <tr><td>Must</td><td>Support at least 4 motors</td></tr>
 <tr><td>Must</td><td>have motion sensor</td></tr>
 <tr><td>Must</td><td>Interface for remote control</td></tr>
 <tr><td>Should</td><td>Have USB 2.0 support</td></tr>
-<tr><td>Could</td><td>COntrol up to 8 motors (Quadruped)</td></tr>
 </tbody></table>
+</div>
 <h1 id="architecture"><a class="header" href="#architecture">Architecture</a></h1>
 <p><img src="./_images/highlevel-architecture.png" alt="image not found!" /></p>
 <ul>
@@ -177,10 +171,9 @@
 <p><strong>Power Supply Inputs</strong></p>
 <p>The board will have two inputs for power:</p>
 <ul>
-<li>Voltage input pins from a PDB (supplying logic and motor power)</li>
-<li>5V input from a USB connector (supplying just logic power)</li>
+<li>Two pin input for single cell LiPo battery</li>
+<li>5V input from a USB connector</li>
 </ul>
-<p><img src="./_images/power-supplies.png" alt="image not found!" /></p>
 <h1 id="sensor"><a class="header" href="#sensor">Sensor</a></h1>
 <p><strong>Requirements</strong></p>
 <p>As one of the purposes of this controller is for drones, understanding orientation in the air will be critical.</p>
@@ -192,21 +185,28 @@
 <h1 id="mcu"><a class="header" href="#mcu">MCU</a></h1>
 <p>The MCU requirements for this project are pretty basic:</p>
 <ul>
-<li>4 PWM outputs (Up to 8)</li>
-<li>PWM inputs</li>
-<li>2x USART</li>
+<li>4 PWM outputs</li>
 <li>1x I2C</li>
-<li>Optional USB support</li>
+<li>USB Serial support</li>
 </ul>
-<p>A STM32F302 for the following reasons:</p>
+<p>And ESP32-C3-MINI-1 module was selected for the following reasons:</p>
 <ul>
-<li>Commonly used in flight controllers</li>
-<li>Commonly used in general</li>
-<li>Had required peripherals including USB 2.0</li>
-<li>Well supported with Rust</li>
+<li>Enough IO to control 4 motors</li>
+<li>I2C for sensors</li>
+<li>Built-in 2.4GHz radio support + antenna</li>
 </ul>
-<p><img src="./_images/periph-usage.png" alt="image not found!" /></p>
-
+<div style="break-before: page; page-break-before: always;"></div><h1 id="board"><a class="header" href="#board">Board</a></h1>
+<p><img src="./_files/icarus-schematic.svg" alt="Image not found" /></p>
+<p><img src="./_files/icarus-top.png" alt="Image not found" /></p>
+<p><img src="./_files/icarus-bottom.png" alt="Image not found" /></p>
+<p><img src="./_files/icarus-3D_top.png" alt="Image not found" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="appendix"><a class="header" href="#appendix">Appendix</a></h1>
+<div class="table-wrapper"><table><thead><tr><th>Document</th><th>Item</th></tr></thead><tbody>
+<tr><td>Schematic</td><td><a href="./_files/icarus-schematic.pdf">schematic</a></td></tr>
+<tr><td>BOM</td><td><a href="./_files/icarus-ibom.html">ibom</a></td></tr>
+<tr><td>Fab Files</td><td><a href="./_files/icarus-jlcpcb_fab.zip">jlcpcb-files</a></td></tr>
+</tbody></table>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
