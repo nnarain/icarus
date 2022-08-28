@@ -34,3 +34,6 @@ hardware/icarus/out/*
 hardware/icarus/icarus-backups/*
 
 build-assets/*
+
+*.stl
+*.3mf
