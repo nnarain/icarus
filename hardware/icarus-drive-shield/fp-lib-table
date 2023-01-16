@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name "icarus")(type "KiCad")(uri "${KIPRJMOD}/../icarus/libraries/kicad-inventory/icarus.pretty")(options "")(descr ""))
+  (lib (name "drone")(type "KiCad")(uri "${KIPRJMOD}/../icarus/libraries/kicad-inventory/drone.pretty")(options "")(descr ""))
+)
