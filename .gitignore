@@ -32,6 +32,7 @@ fp-info-cache
 hardware/icarus/export/*
 hardware/icarus/out/*
 hardware/icarus/icarus-backups/*
+hardware/icarus-drive-shield/icarus-drive-shield-backups/*
 
 build-assets/*
 
