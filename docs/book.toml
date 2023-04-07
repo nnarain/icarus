@@ -21,6 +21,6 @@ files = [
 
 [preprocessor.d2]
 path = "d2"
-layout = "dagre"
+layout = "elk"
 inline = true
 output-dir = "d2"

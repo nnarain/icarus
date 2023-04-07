@@ -38,11 +38,11 @@ sensors: Sensors {
 }
 
 mcu: MCU {
-    spi: Serial
-    spi.shape: parallelogram
+    radio_bus: Radio Bus
+    radio_bus.shape: parallelogram
 
-    i2c: I2C
-    i2c.shape: parallelogram
+    sensor_bus: Sensor Bus
+    sensor_bus.shape: parallelogram
 
     core: Core
     core.shape: diamond
@@ -50,10 +50,10 @@ mcu: MCU {
     pwm: PWM
     pwm.shape: parallelogram
 
-    i2c -> core {
+    sensor_bus -> core {
         style.animated: true
     }
-    spi -> core {
+    radio_bus -> core {
         style.animated: true
     }
     core -> pwm {
@@ -61,7 +61,7 @@ mcu: MCU {
     }
 }
 
-rc: RC Input
+rf: Radio
 
 rotors: Rotors
 rotors.shape: parallelogram
@@ -69,14 +69,33 @@ rotors.shape: parallelogram
 power.reg -> sensors
 power.reg -> mcu
 
-rc -> mcu.spi {
+rf -> mcu: Throttle {
     style.animated: true
 }
 
-sensors -> mcu.i2c {
+mcu -> rf: Telemetry {
     style.animated: true
 }
 
+sensors.imu -> mcu: Accel / Gyro {
+    style.animated: true
+}
+sensors.baro -> mcu: Altitude {
+    style.animated: true
+}
+sensors.mag -> mcu: Orientation {
+    style.animated: true
+}
+
+mcu.pwm -> rotors {
+    style.animated: true
+}
+mcu.pwm -> rotors {
+    style.animated: true
+}
+mcu.pwm -> rotors {
+    style.animated: true
+}
 mcu.pwm -> rotors {
     style.animated: true
 }
