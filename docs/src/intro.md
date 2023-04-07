@@ -4,9 +4,10 @@ Icarus is a flight controller for micro-quads.
 
 Features:
 
-* Controls 4 brushed DC motors
+* ESP32-C3 Module
+* Built-in WiFi and Bluetooth
 * IMU (gyro/accelerometer/temperature)
 * Barometer
-* Battery sense
-* USB Serial
-* 30.5 x 30.5 millimeter mounting holes (for drones)
+* Magnetometer
+* USB 2.0
+* 30.5 x 30.5 millimeter mounting pattern

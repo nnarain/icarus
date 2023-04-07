@@ -37,6 +37,8 @@ jobs:
         with:
           mdbook-version: 'latest'
       - run: cargo install --git https://github.com/nnarain/mdbook-file-search
+      - run: curl -fsSL https://d2lang.com/install.sh | sh -s --
+      - run: cargo install mdbook-d2
       - uses: actions/download-artifact@v2
         with:
           name: output

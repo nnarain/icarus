@@ -10,33 +10,98 @@ The scope of this project is to design and build an embedded system that can be 
 
 | Priority | Item                               |
 | -------- | ---------------------------------- |
-| Must     | Support at least 4 motors          |
-| Must     | have motion sensor                 |
+| Must     | Support control of 4 motors        |
+| Must     | Have motion sensing                |
 | Must     | Interface for remote control       |
 | Should   | Have USB 2.0 support               |
 
-# Architecture
+# High-level Components
 
-![image not found!](./_images/highlevel-architecture.png)
 
-* PWM output to drive motors. There is also PWM input for encoder feedback
+```d2
+power: Power Supply {
+    usb: USB
+    usb.shape: parallelogram
+
+    pwr: PWR Port
+    pwr.shape: parallelogram
+
+    reg: Voltage Regulator
+
+    usb -> reg <- pwr
+}
+
+sensors: Sensors {
+    imu: IMU
+    baro: Barometer
+    mag: Magnetometer
+}
+
+mcu: MCU {
+    spi: Serial
+    spi.shape: parallelogram
+
+    i2c: I2C
+    i2c.shape: parallelogram
+
+    core: Core
+    core.shape: diamond
+
+    pwm: PWM
+    pwm.shape: parallelogram
+
+    i2c -> core {
+        style.animated: true
+    }
+    spi -> core {
+        style.animated: true
+    }
+    core -> pwm {
+        style.animated: true
+    }
+}
+
+rc: RC Input
+
+rotors: Rotors
+rotors.shape: parallelogram
+
+power.reg -> sensors
+power.reg -> mcu
+
+rc -> mcu.spi {
+    style.animated: true
+}
+
+sensors -> mcu.i2c {
+    style.animated: true
+}
+
+mcu.pwm -> rotors {
+    style.animated: true
+}
+
+```
+
+* PWM output to drive rotors
 * An IMU can be used for motion sensing. At minimum a gyro and accelerometer would be required
+* A magnetometer is needed to prevent yaw drift
 * RC input would be require as input to the controller
 
 # Power Supply
 
 **Requirements**
 
-Motorized applications typically require two types of power: Logic power for digital components and analog power for the motors.
+Voltage should be able to handle up to a 3S (11.1V) LiPo for some flexibility in battery choice.
 
 **Power Supply Inputs**
 
 The board will have two inputs for power:
 
-* Two pin input for single cell LiPo battery
+* Two pin input for direct battery connection
 * 5V input from a USB connector
 
-# Sensor
+# Sensors
 
 **Requirements**
 
@@ -45,6 +110,7 @@ As one of the purposes of this controller is for drones, understanding orientati
 **Sensor Selection**
 
 * MPU6050 for attitude estimation
+* Magnetometer to prevent yaw drift (though not required)
 * Barometer for altitude
 
 # MCU
