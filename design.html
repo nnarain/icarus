@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Design - Icarus Controller</title>
+        <title>Design - Icarus Flight Controller</title>
 
 
         <!-- Custom HTML head -->
@@ -32,6 +32,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
@@ -69,10 +70,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -109,7 +112,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">Icarus Controller</h1>
+                    <h1 class="menu-title">Icarus Flight Controller</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -147,34 +150,144 @@
 <h1 id="scope"><a class="header" href="#scope">Scope</a></h1>
 <p>The scope of this project is to design and build an embedded system that can be used as a microquad flight controller.</p>
 <div class="table-wrapper"><table><thead><tr><th>Priority</th><th>Item</th></tr></thead><tbody>
-<tr><td>Must</td><td>Support at least 4 motors</td></tr>
-<tr><td>Must</td><td>have motion sensor</td></tr>
+<tr><td>Must</td><td>Support control of 4 motors</td></tr>
+<tr><td>Must</td><td>Have motion sensing</td></tr>
 <tr><td>Must</td><td>Interface for remote control</td></tr>
 <tr><td>Should</td><td>Have USB 2.0 support</td></tr>
 </tbody></table>
 </div>
-<h1 id="architecture"><a class="header" href="#architecture">Architecture</a></h1>
-<p><img src="./_images/highlevel-architecture.png" alt="image not found!" /></p>
+<h1 id="high-level-components"><a class="header" href="#high-level-components">High-level Components</a></h1>
+<pre><?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.3.0" preserveAspectRatio="xMinYMin meet" viewBox="0 0 956 1589"><svg id="d2-svg" class="d2-1250481773" width="956" height="1589" viewBox="-101 -100 956 1589"><rect x="-101.000000" y="-100.000000" width="956.000000" height="1589.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-1250481773 .text {
+	font-family: "d2-1250481773-font-regular";
+}
+@font-face {
+	font-family: d2-1250481773-font-regular;
+	src: url("data:application/font-woff;base64,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");
+}
+@keyframes dashdraw {
+	from {
+		stroke-dashoffset: 0;
+	}
+}
+
+.d2-1250481773 .text-bold {
+	font-family: "d2-1250481773-font-bold";
+}
+@font-face {
+	font-family: d2-1250481773-font-bold;
+	src: url("data:application/font-woff;base64,d09GRgABAAAAAA3UAAoAAAAAFQAAAguFAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAAA9AAAAGAAAABgXxHXrmNtYXAAAAFUAAAAoQAAANwESASqZ2x5ZgAAAfgAAAdeAAAJmIwacCZoZWFkAAAJWAAAADYAAAA2G38e1GhoZWEAAAmQAAAAJAAAACQKfwXdaG10eAAACbQAAAB4AAAAeDysBRRsb2NhAAAKLAAAAD4AAAA+JiIj6G1heHAAAApsAAAAIAAAACAANgD3bmFtZQAACowAAAMoAAAIKgjwVkFwb3N0AAANtAAAAB0AAAAg/9EAMgADAioCvAAFAAACigJYAAAASwKKAlgAAAFeADIBKQAAAgsHAwMEAwICBGAAAvcAAAADAAAAAAAAAABBREJPACAAIP//Au7/BgAAA9gBESAAAZ8AAAAAAfAClAAAACAAA3ichM3JKkUBAIfx3xnMxzyzOXkEj8DKQolkbSEpCynJ4xhC2ZrKxqtYeoq/Om53e7/1rz4UKgUatQ9saNVKrU3bduzac+DIsROnzly4cu0moTNbPbPvsG/OXf6b/OQ33/nKZ97zlte85DlPecxD7nOX2+48qMK6UqU2ZNiIUWPGTWhMmjJtxqw58xYsWrJsxao1/gAAAP//AQAA//+igyzXAAAAeJxcllts29YZx79zSJO2LF+oGyXZ1I0SKcmWZIki6Ytk2YksO45k+ZKLt/qSBl0uc25IFCQtEmTAgmQrlA2bvCxbh92QAntoH4phwFpgHTBs3YoN6IC06166ZliRlzxUGIxhwWxqICUnTh+kQxDi933n//+dPwVtMA+Aj+NNIKADesACdgCJ8TMhSRR5WpVUlWcJVUQMPY8t2uv3xQgZiZBR3z3vK+vrqLSGN3fOvFA6fvw/62Nj2o/ffke7gy69A0BACQBncBUYcENArymlHA67jaLtxkLxhJRS5LTA84yUMtbSp/kzE7Fwan/+4vT6lJJMpQtLL2eyS7jKFXIDSz1k18HJ/Yci6HaUF3za8vJACABBvLGFh/A96ANoCwiCnFYUKeVgaUHgAxRltzmklKKyFFpdfHXp8J3F3Ev+OZfKDx4YODITzjnnFs3F750984MFKbDGcqm1fS9dCLpWjgHS54eHuAqEMTtTquHqTqV5H7+Jq+A17lsdDlZSFNUqMbzeWuVpmhdF3oPt9tLPTpssJtLEmE7+9BbdQZDy6sJqmiTbaVzV/tE/7vGM96PATuVzX3ne+9qTJ69558u+zwGw0WMIV8EMtj3KUTxvf6rVw5nLhUJlamHm6kQmj6viSrl4PPEJWjwlRQF2ayzhKnQDu1d9Ky8aVZrSlx5PXczn5M3Xry8UR7PZ0SKuhpbnZlZZ7X+PH6NjyaEhQdeYb2xhE74HUUNjUXU4mgVEMY6fF9xuc7Bsc1pkm7iROsQfCcdj0sBhf0YYO50fvhA96JsQhdhI9NBYYfSceSj+FY8Q4LycJdidKCSU5fRgdNXV5+33eJiA89CUsjIMCA40tnDZYEnvLzMSY9hqXFBo7satzVFVzXzr6+a799GaVjtWLB5DZ7Wf378LqPEEAEu4Cl0AErHHL+LdP/xoroftIbud3aW7v8dV7a/yCUU5IaMhw+duAMKHq+D/wnN7KvCEIIg8RdHE7Ze/H6O6KdJkNRWuF0xWE0l30bE7lbcn2rvaSKqrPYur2gfSyXT6pISS2gfJU7J8MoWSOxUUFkrBYEnQ/g4Yoo0t9CHaBhfwAGxAh1k1ZKVFQ2Q7w+v91JSiygbb7+bnb9YwH/FOBOXExuj6iasm0jvd7gpZ5zJe89Hc3HKPX3TaX+SC5y5qn0n9/EXWetQ0wDlZg5FgYwv9E22DU6d5z+kxSPHrLqssRRFSWp8Beacv7tt/Zmx6NUFi7WNTISkrSWHth78UBwOKebyyuFDJ5Tby1lCHIvm/5Pag0Yic0FkkINCIYRptQwLGYNbYmSCnVdno11oUKcVKdr4FekA0Tq6+ZRtFEU1aDbqsLXIDgvGTf4+uDU9b+3xOd2R0TR70/6pMd6SXVc5rCUTmV17MX5vlRJHjRDGSmhBDkstv7ss+cA8PZsJkV9jbl+olLfmBTDls3ugM2EZmg6Yeh9Uytl9aiKP3oxExEg5Holot6GJ7CcLp6ucAoNEAFQA+wQ+wAP0AQAMHr4J+TiYbW8iCfwM9Tfd2OdVF/FNxrMZ0tNGUxRwyv3AQ8zsfsxaEzrbR+nMABIe2DdYYScdLP1G7ljP63umn66TucSEpT1r9s8n5gzXOFxrSvxKoPuGNDYQDyY1V7S/Ir4SHtLdaS7MHBrTdSpRWj93qVLOsr5RaOFDjfP1hJ6rnPLHdQi5We6vFi+FjzxfS1nBJ3OMScuTO5/Pnc7lz+fy5XCwej8VjMXP28uJSJZutLC1ezl4pTUwWi5MTekzBZGMGO9A2WMEDwD6bzkBBEFm74Tof0N8d+pzcAfHLpzLrii/jbisLypGBqC38a/yLpJv/5qXDV3N9rvJ3ULBQvBX7s6UbmntH30bbYHlO32ZiNXfeVxTs/SZnl6u3P2tD9aOpZFvbDZKMpLSHgMDe2EI/QdsgGr4+yz+hmX9Pi+np58F2G/UgeVLYF8h5/R4u7vaMhU8fHjnq3edOu0dGBF82csoseFdcfayVcVhN5uBIZOqI6Fy2OUSnq7uTH4nvXwWDJ6axhc7hip7geu7JvKyqkl2y809faxSClXK+yLxy5QrPmV0m1qqav3rk/bPUzZuX/hgNUeQGZW7WyjS20H9RXff/OTYZqRkqf1s4UPP4+gVH7Won4Z01b6yitPapHHFzaEbrnQoNAgInAK6jeisT2VYSqnuuCF5sZSK9ee27Q5SJIumuDvXGcEcPTdIddOIbV96I0V00SXfSg6j+KDQjCLP8I2OdCT3Set/jC+FwgX/PmNncGEc7qK7T9kx3Vd3bmujGVx3+HjdtaQ+FTfRvN6c7LSaynenI3HmDHS7/jiIvoLYg50b/+ihQCPHT/Eda5/jhaFMTDwD6DN/WT7Ekj+Mmvq2sNeijFUWS7KGF64VkJKA65xPH87k1eWwl7cw4vnaodP10LJEU3eWUlHohK58/rxBt11q8wYeovvvfYbKG6lovoMabeASW8APoBGCMdG9CHorHQ6F4HI9EeT6qf+D/AAAA//8BAAD//ymR89EAAAABAAAAAguFoyhUg18PPPUAAQPoAAAAANhdoIQAAAAA3WYvNv43/sQIbQPxAAEAAwACAAAAAAAAAAEAAAPY/u8AAAiY/jf+NwhtAAEAAAAAAAAAAAAAAAAAAAAeArIAUADIAAACXQBNAkYALgEtAE0C+gBNAlQATQJlAE0CLAAjApkASQIs//kDLQAOAg8AKgIGACQCFgAiARQANwEeAEEDWQBBAjwAQQIrACQCPQBBAY4AQQG7ABUBfwARAjgAPAMIABgCCQAMAhAAHgEUAEEAAP+tAAAALAAsAGAAjACYAMoA7AESAVIBcAGMAcYB/gIyApoCpgLCAvQDFgNCA3IDkgPOA/QEFgROBH4EqgS2BMwAAAABAAAAHgCQAAwAYwAHAAEAAAAAAAAAAAAAAAAABAADeJyclM9uG1UUxn9ObNMKwQJFVbqJ7oJFkejYVEnVNiuH1IpFFAePC0JCSBPP+I8ynhl5Jg7hCVjzFrxFVzwEz4FYo/l87NgF0SaKknx37vnznXO+c4Ed/mabSvUh8Ec9MVxhr35ueIsH9RPD27TrW4arPKn9abhGWJsbrvN5rWf4I95WfzP8gP3qT4YfslttG/6YZ9Udw59sO/4y/Cn7vF3gCrzgV8MVdskMb7HDj4a3eYTFrFR5RNNwjc/YM1xnD+gzoSBmQsIIx5AJI66YEZHjEzFjwpCIEEeHFjGFviYEQo7Rf34N8CmYESjimAJHjE9MQM7YIv4ir5RzZRzqNLO7FgVjAi7kcUlAgiNlREpCxKXiFBRkvKJBg5yB+GYU5HjkTIjxSJkxokGXNqf0GTMhx9FWpJKZT8qQgmsC5XdmUXZmQERCbqyuSAjF04lfJO8Opzi6ZLJdj3y6EeFLHN/Ju+SWyvYrPP26NWabeZdsAubqZ6yuxLq51gTHui3ztvhWuOAV7l792WTy/h6F+l8o8gVXmn+oSSVikuDcLi18Kch3j3Ec6dzBV0e+p0OfE7q8oa9zix49WpzRp8Nr+Xbp4fiaLmccy6MjvLhrSzFn/IDjGzqyKWNH1p/FxCJ+JjN15+I4Ux1TMvW8ZO6p1kgV3n3C5Q6lG+rI5TPQHpWWTvNLtGcBI1NFJoZT9XKpjdz6F5oipqqlnO3tfbkNc9u95RbfkGqHS7UuOJWTWzB631S9dzRzrR+PgJCUC1kMSJnSoOBGvM8JuCLGcazunWhLClornzLPjVQSMRWDDonizMj0NzDd+MZ9sKF7Z29JKP+S6eWqqvtkcerV7YzeqHvLO9+6HK1NoGFTTdfUNBDXxLQfaafW+fvyzfW6pTzliJSY8F8vwDM8muxzwCFjZRjoZm6vQ1MvRJOXHKr6SyJZDaXnyCIc4PGcAw54yfN3+rhk4oyLW3FZz93imCO6HH5QFQv7Lke8Xn37/6y/i2lTtTierk4v7j3FJ3dQ6xfas9v3sqeJlZOYW7TbrTgjYFpycbvrNbnHeP8AAAD//wEAAP//9LdPUXicYmBmAIP/5xiMGLAAAAAAAP//AQAA//8vAQIDAAAA");
+}]]></style><style type="text/css"><![CDATA[.shape {
+  shape-rendering: geometricPrecision;
+  stroke-linejoin: round;
+}
+.connection {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.blend {
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+		.d2-1250481773 .fill-N1{fill:#0A0F25;}
+		.d2-1250481773 .fill-N2{fill:#676C7E;}
+		.d2-1250481773 .fill-N3{fill:#9499AB;}
+		.d2-1250481773 .fill-N4{fill:#CFD2DD;}
+		.d2-1250481773 .fill-N5{fill:#DEE1EB;}
+		.d2-1250481773 .fill-N6{fill:#EEF1F8;}
+		.d2-1250481773 .fill-N7{fill:#FFFFFF;}
+		.d2-1250481773 .fill-B1{fill:#0D32B2;}
+		.d2-1250481773 .fill-B2{fill:#0D32B2;}
+		.d2-1250481773 .fill-B3{fill:#E3E9FD;}
+		.d2-1250481773 .fill-B4{fill:#E3E9FD;}
+		.d2-1250481773 .fill-B5{fill:#EDF0FD;}
+		.d2-1250481773 .fill-B6{fill:#F7F8FE;}
+		.d2-1250481773 .fill-AA2{fill:#4A6FF3;}
+		.d2-1250481773 .fill-AA4{fill:#EDF0FD;}
+		.d2-1250481773 .fill-AA5{fill:#F7F8FE;}
+		.d2-1250481773 .fill-AB4{fill:#EDF0FD;}
+		.d2-1250481773 .fill-AB5{fill:#F7F8FE;}
+		.d2-1250481773 .stroke-N1{stroke:#0A0F25;}
+		.d2-1250481773 .stroke-N2{stroke:#676C7E;}
+		.d2-1250481773 .stroke-N3{stroke:#9499AB;}
+		.d2-1250481773 .stroke-N4{stroke:#CFD2DD;}
+		.d2-1250481773 .stroke-N5{stroke:#DEE1EB;}
+		.d2-1250481773 .stroke-N6{stroke:#EEF1F8;}
+		.d2-1250481773 .stroke-N7{stroke:#FFFFFF;}
+		.d2-1250481773 .stroke-B1{stroke:#0D32B2;}
+		.d2-1250481773 .stroke-B2{stroke:#0D32B2;}
+		.d2-1250481773 .stroke-B3{stroke:#E3E9FD;}
+		.d2-1250481773 .stroke-B4{stroke:#E3E9FD;}
+		.d2-1250481773 .stroke-B5{stroke:#EDF0FD;}
+		.d2-1250481773 .stroke-B6{stroke:#F7F8FE;}
+		.d2-1250481773 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-1250481773 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-1250481773 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-1250481773 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-1250481773 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-1250481773 .background-color-N1{background-color:#0A0F25;}
+		.d2-1250481773 .background-color-N2{background-color:#676C7E;}
+		.d2-1250481773 .background-color-N3{background-color:#9499AB;}
+		.d2-1250481773 .background-color-N4{background-color:#CFD2DD;}
+		.d2-1250481773 .background-color-N5{background-color:#DEE1EB;}
+		.d2-1250481773 .background-color-N6{background-color:#EEF1F8;}
+		.d2-1250481773 .background-color-N7{background-color:#FFFFFF;}
+		.d2-1250481773 .background-color-B1{background-color:#0D32B2;}
+		.d2-1250481773 .background-color-B2{background-color:#0D32B2;}
+		.d2-1250481773 .background-color-B3{background-color:#E3E9FD;}
+		.d2-1250481773 .background-color-B4{background-color:#E3E9FD;}
+		.d2-1250481773 .background-color-B5{background-color:#EDF0FD;}
+		.d2-1250481773 .background-color-B6{background-color:#F7F8FE;}
+		.d2-1250481773 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-1250481773 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-1250481773 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-1250481773 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-1250481773 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-1250481773 .color-N1{color:#0A0F25;}
+		.d2-1250481773 .color-N2{color:#676C7E;}
+		.d2-1250481773 .color-N3{color:#9499AB;}
+		.d2-1250481773 .color-N4{color:#CFD2DD;}
+		.d2-1250481773 .color-N5{color:#DEE1EB;}
+		.d2-1250481773 .color-N6{color:#EEF1F8;}
+		.d2-1250481773 .color-N7{color:#FFFFFF;}
+		.d2-1250481773 .color-B1{color:#0D32B2;}
+		.d2-1250481773 .color-B2{color:#0D32B2;}
+		.d2-1250481773 .color-B3{color:#E3E9FD;}
+		.d2-1250481773 .color-B4{color:#E3E9FD;}
+		.d2-1250481773 .color-B5{color:#EDF0FD;}
+		.d2-1250481773 .color-B6{color:#F7F8FE;}
+		.d2-1250481773 .color-AA2{color:#4A6FF3;}
+		.d2-1250481773 .color-AA4{color:#EDF0FD;}
+		.d2-1250481773 .color-AA5{color:#F7F8FE;}
+		.d2-1250481773 .color-AB4{color:#EDF0FD;}
+		.d2-1250481773 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="power"><g class="shape" ><rect x="0.000000" y="41.000000" width="670.000000" height="291.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g><text x="335.000000" y="28.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">Power Supply</text></g><g id="sensors"><g class="shape" ><rect x="8.000000" y="473.000000" width="542.000000" height="125.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g><text x="279.000000" y="460.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">Sensors</text></g><g id="mcu"><g class="shape" ><rect x="333.000000" y="739.000000" width="421.000000" height="483.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g><text x="543.500000" y="726.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">MCU</text></g><g id="rc"><g class="shape" ><rect x="637.000000" y="482.000000" width="105.000000" height="66.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="689.500000" y="520.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">RC Input</text></g><g id="rotors"><g class="shape" ><path d="M 503 1322 L 621 1322 L 595 1388 L 477 1388 L 477 1388 Z" class=" stroke-B1 fill-N5" style="stroke-width:2;" /></g><text x="549.000000" y="1360.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Rotors</text></g><g id="power.usb"><g class="shape" ><path d="M 78 70 L 178 70 L 152 136 L 52 136 L 52 136 Z" class=" stroke-B1 fill-N5" style="stroke-width:2;" /></g><text x="115.000000" y="108.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">USB</text></g><g id="power.pwr"><g class="shape" ><path d="M 491 70 L 628 70 L 602 136 L 465 136 L 465 136 Z" class=" stroke-B1 fill-N5" style="stroke-width:2;" /></g><text x="546.500000" y="108.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">PWR Port</text></g><g id="power.reg"><g class="shape" ><rect x="240.000000" y="236.000000" width="174.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="327.000000" y="274.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Voltage Regulator</text></g><g id="sensors.imu"><g class="shape" ><rect x="48.000000" y="502.000000" width="71.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="83.500000" y="540.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">IMU</text></g><g id="sensors.baro"><g class="shape" ><rect x="179.000000" y="502.000000" width="121.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="239.500000" y="540.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Barometer</text></g><g id="sensors.mag"><g class="shape" ><rect x="360.000000" y="502.000000" width="150.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="435.000000" y="540.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Magnetometer</text></g><g id="mcu.spi"><g class="shape" ><path d="M 600 768 L 713 768 L 687 834 L 574 834 L 574 834 Z" class=" stroke-B1 fill-N5" style="stroke-width:2;" /></g><text x="643.500000" y="806.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Serial</text></g><g id="mcu.i2c"><g class="shape" ><path d="M 402 768 L 495 768 L 469 834 L 376 834 L 376 834 Z" class=" stroke-B1 fill-N5" style="stroke-width:2;" /></g><text x="435.500000" y="806.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">I2C</text></g><g id="mcu.core"><g class="shape" ><path d="M 549 1026 C 549 1026 548 1026 548 1026 L 501 981 C 501 981 501 980 501 979 L 548 934 C 548 934 549 934 550 934 L 597 979 C 597 979 597 980 597 981 L 550 1026 C 550 1026 549 1026 549 1026 Z" class=" stroke-B1 fill-N4" style="stroke-width:2;" /></g><text x="549.000000" y="985.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Core</text></g><g id="mcu.pwm"><g class="shape" ><path d="M 510 1126 L 614 1126 L 588 1192 L 484 1192 L 484 1192 Z" class=" stroke-B1 fill-N5" style="stroke-width:2;" /></g><text x="549.000000" y="1164.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">PWM</text></g><g id="power.(usb -&gt; reg)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 115.000000 139.000000 C 115.000000 176.600000 140.600000 196.500000 239.274171 235.044598" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-1250481773)" /></g><g id="power.(reg &lt;- pwr)[0]"><marker id="mk-2451250203" markerWidth="10.000000" markerHeight="12.000000" refX="3.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="10.000000,0.000000 0.000000,6.000000 10.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 417.491450 235.187743 C 519.750000 196.520501 546.200000 176.600000 546.010101 138.999974" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-start="url(#mk-2451250203)" mask="url(#d2-1250481773)" /></g><g id="mcu.(i2c -&gt; core)[0]"><path d="M 435.000000 837.000000 C 435.000000 874.600000 452.600000 899.400000 519.947113 956.415454" fill="none" class="connection animated-connection stroke-B1" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;stroke-dashoffset:-198.656393;animation: dashdraw 4.932820s linear infinite;" marker-end="url(#mk-3488378134)" mask="url(#d2-1250481773)" /></g><g id="mcu.(spi -&gt; core)[0]"><path d="M 643.010101 836.999974 C 643.200000 874.600000 629.200000 899.000000 575.783500 954.127349" fill="none" class="connection animated-connection stroke-B1" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;stroke-dashoffset:-198.656393;animation: dashdraw 4.932820s linear infinite;" marker-end="url(#mk-3488378134)" mask="url(#d2-1250481773)" /></g><g id="mcu.(core -&gt; pwm)[0]"><path d="M 548.989899 1028.999974 C 548.800000 1066.600000 548.800000 1086.600000 548.980198 1123.000049" fill="none" class="connection animated-connection stroke-B1" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;stroke-dashoffset:-198.656393;animation: dashdraw 4.932820s linear infinite;" marker-end="url(#mk-3488378134)" mask="url(#d2-1250481773)" /></g><g id="(power.reg -&gt; sensors)[0]"><path d="M 237.792698 299.596567 C 114.750000 325.437102 83.500000 400.200000 83.500000 469.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-1250481773)" /></g><g id="(power.reg -&gt; mcu)[0]"><path d="M 415.712932 296.602974 C 560.350000 324.843941 597.000000 342.000000 597.000000 357.000000 C 597.000000 372.000000 597.000000 392.000000 597.000000 407.000000 C 597.000000 422.000000 597.000000 448.600000 597.000000 473.500000 C 597.000000 498.400000 597.000000 531.600000 597.000000 556.500000 C 597.000000 581.400000 597.000000 666.200000 597.000000 735.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-1250481773)" /></g><g id="(rc -&gt; mcu.spi)[0]"><path d="M 689.500000 550.000000 C 689.500000 588.000000 689.500000 608.000000 689.500000 623.000000 C 689.500000 638.000000 683.800000 712.200000 662.490069 765.287899" fill="none" class="connection animated-connection stroke-B1" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;stroke-dashoffset:-198.656393;animation: dashdraw 4.932820s linear infinite;" marker-end="url(#mk-3488378134)" mask="url(#d2-1250481773)" /></g><g id="(sensors -&gt; mcu.i2c)[0]"><path d="M 435.000000 600.000000 C 435.000000 638.000000 435.000000 712.200000 435.000000 765.000000" fill="none" class="connection animated-connection stroke-B1" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;stroke-dashoffset:-198.656393;animation: dashdraw 4.932820s linear infinite;" marker-end="url(#mk-3488378134)" mask="url(#d2-1250481773)" /></g><g id="(mcu.pwm -&gt; rotors)[0]"><path d="M 548.982759 1194.999926 C 548.800000 1216.200000 548.800000 1282.000000 548.980000 1318.000050" fill="none" class="connection animated-connection stroke-B1" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;stroke-dashoffset:-198.656393;animation: dashdraw 4.932820s linear infinite;" marker-end="url(#mk-3488378134)" mask="url(#d2-1250481773)" /></g><mask id="d2-1250481773" maskUnits="userSpaceOnUse" x="-101" y="-100" width="956" height="1589">
+<rect x="-101" y="-100" width="956" height="1589" fill="white"></rect>
+
+</mask></svg></svg>
+</pre>
 <ul>
-<li>PWM output to drive motors. There is also PWM input for encoder feedback</li>
+<li>PWM output to drive rotors</li>
 <li>An IMU can be used for motion sensing. At minimum a gyro and accelerometer would be required</li>
+<li>A magnetometer is needed to prevent yaw drift</li>
 <li>RC input would be require as input to the controller</li>
 </ul>
 <h1 id="power-supply"><a class="header" href="#power-supply">Power Supply</a></h1>
 <p><strong>Requirements</strong></p>
-<p>Motorized applications typically require two types of power: Logic power for digital components and analog power for the motors.</p>
+<p>Voltage should be able to handle up to a 3S (11.1V) LiPo for some flexibility in battery choice.</p>
 <p><strong>Power Supply Inputs</strong></p>
 <p>The board will have two inputs for power:</p>
 <ul>
-<li>Two pin input for single cell LiPo battery</li>
+<li>Two pin input for direct battery connection</li>
 <li>5V input from a USB connector</li>
 </ul>
-<h1 id="sensor"><a class="header" href="#sensor">Sensor</a></h1>
+<h1 id="sensors"><a class="header" href="#sensors">Sensors</a></h1>
 <p><strong>Requirements</strong></p>
 <p>As one of the purposes of this controller is for drones, understanding orientation in the air will be critical.</p>
 <p><strong>Sensor Selection</strong></p>
 <ul>
 <li>MPU6050 for attitude estimation</li>
+<li>Magnetometer to prevent yaw drift (though not required)</li>
 <li>Barometer for altitude</li>
 </ul>
 <h1 id="mcu"><a class="header" href="#mcu">MCU</a></h1>
@@ -239,5 +352,6 @@
         <!-- Custom JS scripts -->
 
 
+    </div>
     </body>
 </html>
